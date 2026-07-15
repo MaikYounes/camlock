@@ -1,21 +1,12 @@
---==================================================
--- ELITE TRACKER LOADER
---==================================================
-
 local VERSION = "5.0"
 
 local BASE_URL =
-"https://raw.githubusercontent.com/MaikYounes/EliteTracker/main/"
+"https://raw.githubusercontent.com/MaikYounes/camlock/main/"
 
-
---------------------------------------------------
--- IMPORT
---------------------------------------------------
 
 local function Import(file)
 
 	local url = BASE_URL .. file
-
 
 	local success, result = pcall(function()
 
@@ -27,15 +18,9 @@ local function Import(file)
 
 
 	if not success then
-
-		warn(
-			"[Loader Error] "..file
-		)
-
+		warn("[ERROR CARGANDO] "..file)
 		warn(result)
-
 		return nil
-
 	end
 
 
@@ -45,75 +30,36 @@ end
 
 
 
---------------------------------------------------
--- LOAD FILES
---------------------------------------------------
+local Config = Import("Config.lua")
 
-local Config =
-	Import("Config.lua")
+local Maid = Import("Maid.lua")
 
+local Tracker = Import("Tracker.lua")
 
-local Maid =
-	Import("Maid.lua")
+local ESP = Import("ESP.lua")
 
+local PlayerManager = Import("PlayerManager.lua")
 
-local Tracker =
-	Import("Tracker.lua")
+local UI = Import("UI.lua")
 
-
-local ESP =
-	Import("ESP.lua")
-
-
-local PlayerManager =
-	Import("PlayerManager.lua")
-
-
-local UI =
-	Import("UI.lua")
-
-
-local Input =
-	Import("Input.lua")
+local Input = Import("Input.lua")
 
 
 
---------------------------------------------------
--- CHECK
---------------------------------------------------
+if not Config
+or not Maid
+or not Tracker
+or not ESP
+or not PlayerManager
+or not UI
+or not Input then
 
-local Modules = {
-
-	Config,
-	Maid,
-	Tracker,
-	ESP,
-	PlayerManager,
-	UI,
-	Input
-
-}
-
-
-for _,module in ipairs(Modules) do
-
-	if not module then
-
-		warn(
-			"Elite Tracker: módulo faltante"
-		)
-
-		return
-
-	end
+	warn("Faltan archivos en GitHub")
+	return
 
 end
 
 
-
---------------------------------------------------
--- CONNECT MODULES
---------------------------------------------------
 
 ESP:Init(
 	Config,
@@ -150,6 +96,4 @@ Input:Init(
 
 
 
-print(
-	"Elite Tracker cargado correctamente | "..VERSION
-)
+print("Elite Tracker cargado correctamente")
